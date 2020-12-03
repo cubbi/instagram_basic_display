@@ -36,6 +36,12 @@ module InstagramBasicDisplay
       @configuration = configuration
     end
 
+    def initialize(client_id = nil, client_secret = nil, redirect_uri = nil)
+      @configuration = Configuration.new
+      @configuration.client_id = client_id || InstagramBasicDisplay.config.client_id
+      @configuration.client_secret = client_secret || InstagramBasicDisplay.config.client_secret
+      @configuration.redirect_uri = redirect_uri || InstagramBasicDisplay.config.redirect_uri
+    end
 
     # Create authorization URL for redirecting the user to obtain the short lived authroization token
     #
@@ -120,8 +126,6 @@ module InstagramBasicDisplay
       response = Net::HTTP.get_response(uri)
       InstagramBasicDisplay::Response.new(response)
     end
-
-    private
 
     attr_reader :configuration
   end

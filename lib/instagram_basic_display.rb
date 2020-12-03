@@ -18,4 +18,15 @@ require 'instagram_basic_display/version'
 require 'instagram_basic_display/client'
 
 module InstagramBasicDisplay
+
+  class << self
+    def configure
+      yield config
+    end
+
+    def config
+      @config ||= Configuration.new
+    end
+  end
+
 end

@@ -26,22 +26,7 @@ module InstagramBasicDisplay
     #
     # @return void
     def initialize(auth_token: nil)
-      @client_id = set_client_id
-      @client_secret = set_client_secret
-      @redirect_uri = set_redirect_uri
       @auth_token = auth_token
-    end
-
-    def set_client_id
-      ENV.fetch('INSTAGRAM_CLIENT_ID')
-    end
-
-    def set_client_secret
-      ENV.fetch('INSTAGRAM_CLIENT_SECRET')
-    end
-
-    def set_redirect_uri
-      ENV.fetch('INSTAGRAM_REDIRECT_URI')
     end
   end
 end

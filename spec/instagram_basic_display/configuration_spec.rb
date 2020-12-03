@@ -15,23 +15,27 @@
 # limitations under the License.
 
 RSpec.describe InstagramBasicDisplay::Configuration do
-  it 'pulls variables from ENV' do
-    expect(subject.client_id).to eq 'mock_client_id'
-    expect(subject.client_secret).to eq 'mock_secret'
-    expect(subject.redirect_uri).to eq 'mock_redirect_uri'
+
+  subject { InstagramBasicDisplay::Auth.new() }
+
+  it 'pulls variables from global configuration' do
+    expect(subject.configuration.client_id).to eq 'mock_client_id'
+    expect(subject.configuration.client_secret).to eq 'mock_secret'
+    expect(subject.configuration.redirect_uri).to eq 'mock_redirect_uri'
   end
 
-  context 'when ENV variables are not present' do
-    it 'raises an error if ENV variables are not present' do
-      populated_env = ENV
-      ENV = {}.freeze
-      expect { subject }.to raise_error KeyError
-      ENV = populated_env
-    end
+  it 'allow to rewrite some of the variables locally' do
+
+    subject = InstagramBasicDisplay::Auth.new(nil, "different_mock_secret")
+
+    expect(subject.configuration.client_id).to eq 'mock_client_id'
+    expect(subject.configuration.client_secret).to eq 'different_mock_secret'
+    expect(subject.configuration.redirect_uri).to eq 'mock_redirect_uri'
   end
+
 
   it 'allows variables to be overwritten' do
-    subject.client_id = 'different_client_id'
-    expect(subject.client_id).to eq 'different_client_id'
+    subject.configuration.client_id = 'different_client_id'
+    expect(subject.configuration.client_id).to eq 'different_client_id'
   end
 end
