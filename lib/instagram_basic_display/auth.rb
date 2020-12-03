@@ -36,6 +36,33 @@ module InstagramBasicDisplay
       @configuration = configuration
     end
 
+
+    # Create authorization URL for redirecting the user to obtain the short lived authroization token
+    #
+    # @param scope [String] A list of potential scopes for the token
+    # @param state [String] Optional state parameter - check Facebook documentation   
+    #
+    # @return [URI] a response object with URI    
+    def url_for_oauth_code(scope= nil, state= nil)
+
+      scope = "user_profile" if scope.nil?
+
+      uri = URI('https://api.instagram.com/oauth/authorize')
+      params = {
+          client_id: configuration.client_id,
+          client_secret: configuration.client_secret,
+          redirect_uri: configuration.redirect_uri,
+          response_type: "code",
+          scope: scope
+      }
+
+      params[:state] = state if state
+  
+      uri.query = URI.encode_www_form(params)
+      uri
+    end
+
+
     # Exchanges an access code for a _short-lived_ access token. A short-lived token is valid
     # for one hour, but can be exchanged for a long-lived token. Refer to Instagram's documentation.
     # https://developers.facebook.com/docs/instagram-basic-display-api/overview#short-lived-access-tokens

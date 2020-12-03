@@ -21,6 +21,27 @@ RSpec.describe InstagramBasicDisplay::Auth do
 
   subject { InstagramBasicDisplay::Auth.new(config) }
 
+
+  describe '#authorization_url' do
+    it 'returns authorization url for access token' do
+      VCR.use_cassette('authorization_url') do 
+        response = subject.url_for_oauth_code()
+        expect(response).to be_a URI
+        expect(response.to_s).to start_with 'https://api.instagram.com/oauth/authorize'
+        expect(response.to_s).to include('user_profile')
+      end
+    end
+
+    it 'returns authorization url for access token without user_profile' do
+      VCR.use_cassette('authorization_url') do 
+        response = subject.url_for_oauth_code('user_media')
+        expect(response.to_s).not_to include('user_profile')
+      end
+    end
+
+
+  end
+
   describe '#short_lived_token' do
     it 'exchanges an access code for a short lived token' do
       VCR.use_cassette('short_lived_token') do
