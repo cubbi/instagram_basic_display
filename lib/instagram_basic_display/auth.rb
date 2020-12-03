@@ -56,15 +56,14 @@ module InstagramBasicDisplay
       uri = URI('https://api.instagram.com/oauth/authorize')
       params = {
           client_id: configuration.client_id,
-          client_secret: configuration.client_secret,
-          redirect_uri: configuration.redirect_uri,
+          scope: scope,
           response_type: "code",
-          scope: scope
+          redirect_uri: configuration.redirect_uri
       }
 
       params[:state] = state if state
   
-      uri.query = URI.encode_www_form(params)
+      uri.query = params.map{|k,v| "#{k}=#{v}"}.join('&')
       uri
     end
 
